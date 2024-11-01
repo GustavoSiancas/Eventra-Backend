@@ -2,6 +2,7 @@ package com.example.demo.mapper;
 
 import com.example.demo.controller.client.response.ClientResponse;
 import com.example.demo.entity.ClientEntity;
+import com.example.demo.entity.enums.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,7 +24,8 @@ public class ClientMapper {
                 clientEntity.getCountry(),
                 clientEntity.getGender(),
                 clientEntity.getDirection(),
-                clientEntity.getPhone()
+                clientEntity.getPhone(),
+                UserRole.CLIENT
                 );
         return clientResponse;
     }

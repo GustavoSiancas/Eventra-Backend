@@ -2,6 +2,7 @@ package com.example.demo.mapper;
 
 import com.example.demo.controller.business.response.BusinessResponse;
 import com.example.demo.entity.Business;
+import com.example.demo.entity.enums.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +21,8 @@ public class BusinessMapper {
                 business.getAddress(),
                 business.getReasonSocial(),
                 business.getComercialName(),
-                business.getCategory()
+                business.getCategory(),
+                UserRole.BUSINESS
         );
     }
 }

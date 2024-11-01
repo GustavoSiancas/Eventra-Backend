@@ -1,5 +1,7 @@
 package com.example.demo.controller.client.response;
 
+import com.example.demo.entity.enums.UserRole;
+
 import java.time.LocalDate;
 
 public record ClientResponse (
@@ -12,5 +14,6 @@ public record ClientResponse (
         String country,
         String gender,
         String Direction,
-        String phone
+        String phone,
+        UserRole role
 ) { }
