@@ -107,11 +107,13 @@ public class ActivityService {
         List<ActivityCard> activityCards=new ArrayList<>();
         for (ActivityEntity activity: lists){
             Long EventId=eventService.getEventId(activity.getId());
+            Event evento=eventService.getEvent(activity.getId());
             List<String> tags= tagService.getAllTagsByEventId(activity.getId());
             BigDecimal price=ticketService.getLowestPrice(EventId);
             activityCards.add(new ActivityCard(
                     activity.getId(),
                     activity.getPhoto(),
+                    evento.getDateTime(),
                     activity.getName(),
                     tags,
                     price,

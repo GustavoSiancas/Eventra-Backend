@@ -49,6 +49,11 @@ public class EventService {
         return events.getFirst().getId();
     }
 
+    public Event getEvent(Long activityId) {
+        List<Event> events= eventRepository.findByActivity_Id(activityId);
+        return events.getFirst();
+    }
+
     /*
     public Event createCompleteEvent(EventCompleteRequest eventCompleteRequest) {
         // Crear y guardar el evento primero
