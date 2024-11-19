@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controller.client.request.ClientRequest;
 import com.example.demo.controller.client.request.ClientUpdateRequest;
 import com.example.demo.controller.client.response.ClientResponse;
 import com.example.demo.entity.ClientEntity;
@@ -69,19 +70,19 @@ public class ClientService {
                 .orElseThrow(() -> new IllegalArgumentException("Este usuario no es cliente"));
     }*/
 
-    public ClientResponse updateClient(ClientUpdateRequest clientUpdateRequest, Long id) {
-        Optional<ClientEntity> actualClient= getClientById(id);
+    public ClientResponse updateClient(ClientRequest clientRequest) {
+        Optional<ClientEntity> actualClient= clientRepository.findById(clientRequest.clientId());
         System.out.println("Cliente buscado");
         if (actualClient.isPresent()){
             ClientEntity client=actualClient.get();
             //update
-            client.setRealName(clientUpdateRequest.realname());
-            client.setBirthDate(clientUpdateRequest.birthday());
-            client.setDni(clientUpdateRequest.dni());
-            client.setCountry(clientUpdateRequest.country());
-            client.setGender(clientUpdateRequest.gender());
-            client.setDirection(clientUpdateRequest.Direction());
-            client.setPhone(clientUpdateRequest.phone());
+            client.setRealName(clientRequest.realName());
+            client.setBirthDate(clientRequest.birthDate());
+            client.setDni(clientRequest.dni());
+            client.setCountry(clientRequest.country());
+            client.setGender(clientRequest.gender());
+            client.setDirection(clientRequest.direction());
+            client.setPhone(clientRequest.phone());
             client = clientRepository.save(client);
             System.out.println("Cliente actualisado");
             return clientMapper.toClientResponse(client);

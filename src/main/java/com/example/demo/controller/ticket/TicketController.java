@@ -1,6 +1,7 @@
 package com.example.demo.controller.ticket;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.Response.TicketVResponse;
 import com.example.demo.controller.ticket.request.BuyInTicketRequest;
 import com.example.demo.controller.ticket.request.TicketRequest;
 import com.example.demo.entity.TicketsEntity;
@@ -27,6 +28,11 @@ public class TicketController {
     public ResponseEntity<TicketsNFT> createBuyInTicket(@RequestBody BuyInTicketRequest ticketRequest) {
         TicketsNFT createdTicket = ticketsNFTService.createTicketsNFT(ticketRequest);
         return ResponseEntity.ok(createdTicket);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<TicketVResponse>> getTicketsByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketsNFTService.getTicketsByUserId(id));
     }
 /*
     @GetMapping

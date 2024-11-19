@@ -36,4 +36,9 @@ public class BusinessController {
         return business.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping
+    public ResponseEntity<Business> updateBusiness(@RequestBody BusinessRequest businessRequest) {
+        return ResponseEntity.ok(businessService.updateBusiness(businessRequest));
+    }
 }

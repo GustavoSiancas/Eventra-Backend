@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controller.business.request.BusinessRequest;
 import com.example.demo.controller.business.response.BusinessResponse;
 import com.example.demo.entity.Business;
 import com.example.demo.entity.UserEntity;
@@ -57,5 +58,16 @@ public class BusinessService {
     // Método para obtener un negocio por su ID
     public Optional<Business> getBusinessById(Long id) {
         return businessRepository.findById(id);
+    }
+
+    public Business updateBusiness(BusinessRequest businessRequest) {
+        Business oldBusiness = businessRepository.findById(businessRequest.businessId()).orElseThrow(null);
+        oldBusiness.setBusinessName(businessRequest.businessName());
+        oldBusiness.setRuc(businessRequest.ruc());
+        oldBusiness.setAddress(businessRequest.address());
+        oldBusiness.setReasonSocial(businessRequest.reasonSocial());
+        oldBusiness.setComercialName(businessRequest.comercialName());
+        oldBusiness.setCategory(businessRequest.category());
+        return businessRepository.save(oldBusiness);
     }
 }

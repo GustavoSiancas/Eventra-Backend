@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.Response.TicketVResponse;
 import com.example.demo.controller.ticket.request.BuyInTicketRequest;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.TicketsNFT;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -83,4 +85,20 @@ public class TicketsNFTService {
                 .toList(); // Si usas Java 11 o superior
     }
 
+    public List<TicketVResponse> getTicketsByUserId(Long userId) {
+        List<TicketsNFT> ticketsNFTs = ticketsNFTRepository.findByClient_Id(userId);
+        ticketsNFTs.sort(Comparator.comparing(ticket->ticket.getTicket().getEvent().getDateTime(),Comparator.reverseOrder()));
+        List<TicketVResponse> ticketVResponses = new ArrayList<>();
+        for (TicketsNFT ticket : ticketsNFTs) {
+            ticketVResponses.add(new TicketVResponse(
+                    ticket.getId(),
+                    ticket.getTicket().getEvent().getActivity().getPhoto(),
+                    ticket.getTicket().getName(),
+                    ticket.getTicket().getEvent().getDateTime(),
+                    ticket.getNft(),
+                    ticket.getTicket().getName()
+            ));
+        }
+        return ticketVResponses;
+    }
 }

@@ -8,5 +8,5 @@ public record BusinessRequest(
         String reasonSocial,
         String comercialName,
         String category,
-        Long userId // ID del usuario asociado
+        Long businessId // ID del usuario asociado
 ) {}

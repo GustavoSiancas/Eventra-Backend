@@ -1,5 +1,6 @@
 package com.example.demo.controller.client;
 
+import com.example.demo.controller.client.request.ClientRequest;
 import com.example.demo.controller.client.request.ClientUpdateRequest;
 import com.example.demo.controller.client.response.ClientResponse;
 import com.example.demo.entity.ClientEntity;
@@ -46,12 +47,10 @@ public class ClientController {
         return ResponseEntity.ok(client);
 
     }*/
-    @PutMapping("/{id}")
-    public ResponseEntity<ClientResponse> updateClient(
-            @PathVariable Long id,
-            @RequestBody ClientUpdateRequest clientUpdateRequest) {
+    @PutMapping
+    public ResponseEntity<ClientResponse> updateClient(@RequestBody ClientRequest clientRequest) {
         try {
-            ClientResponse updatedClient = clientService.updateClient(clientUpdateRequest, id);
+            ClientResponse updatedClient = clientService.updateClient(clientRequest);
             return ResponseEntity.ok(updatedClient);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Cliente no encontrado

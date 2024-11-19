@@ -10,5 +10,5 @@ public record ClientRequest(
         String gender,
         String direction,
         String phone,
-        Long userId // Si necesitas
+        Long clientId // Si necesitas
 ) {}
