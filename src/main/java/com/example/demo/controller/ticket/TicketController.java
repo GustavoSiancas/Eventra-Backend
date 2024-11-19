@@ -2,6 +2,7 @@ package com.example.demo.controller.ticket;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
 import com.example.demo.controller.ticket.Response.TicketVResponse;
+import com.example.demo.controller.ticket.Response.TypeTIcketResponse;
 import com.example.demo.controller.ticket.request.BuyInTicketRequest;
 import com.example.demo.controller.ticket.request.TicketRequest;
 import com.example.demo.entity.TicketsEntity;
@@ -30,9 +31,14 @@ public class TicketController {
         return ResponseEntity.ok(createdTicket);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<List<TicketVResponse>> getTicketsByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(ticketsNFTService.getTicketsByUserId(id));
+    }
+
+    @GetMapping("/event/{id}")
+    public ResponseEntity<List<TypeTIcketResponse>> getTicketsByEventId(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketService.getAllTickets(id));
     }
 /*
     @GetMapping

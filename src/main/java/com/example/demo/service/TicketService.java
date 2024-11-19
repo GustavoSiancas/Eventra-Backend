@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.ticket.Response.TicketNFTResponse;
+import com.example.demo.controller.ticket.Response.TypeTIcketResponse;
 import com.example.demo.controller.ticket.request.TickeSimpleRequest;
 import com.example.demo.controller.ticket.request.TicketRequest;
 import com.example.demo.entity.TicketsEntity;
@@ -69,6 +70,18 @@ public class TicketService {
         return ticketRepository.findById(id);
     }
 
+    public List<TypeTIcketResponse> getAllTickets(Long eventId) {
+        List<TicketsEntity> tickets=ticketRepository.findByEvent_Id(eventId);
+        List<TypeTIcketResponse> ticketList= new ArrayList<>();
+        for (TicketsEntity ticketEntity : tickets) {
+            ticketList.add(new TypeTIcketResponse(
+               ticketEntity.getId(),
+               ticketEntity.getName(),
+               ticketEntity.getPrice()
+            ));
+        }
+        return ticketList;
+    }
 
     /*
     public List<TicketsEntity> getAllTickets() {
