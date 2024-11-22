@@ -95,8 +95,8 @@ public class TicketsNFTService {
                     ticket.getTicket().getEvent().getActivity().getPhoto(),
                     ticket.getTicket().getName(),
                     ticket.getTicket().getEvent().getDateTime(),
-                    ticket.getNft(),
-                    ticket.getTicket().getName()
+                    ticket.getUuid(),
+                    ticket.getTicket().getEvent().getActivity().getDescription()
             ));
         }
         return ticketVResponses;
