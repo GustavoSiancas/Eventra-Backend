@@ -133,22 +133,23 @@ public class ActivityService {
         List<ActivityEntity> lists = activityRepository.findAll();
         List<ActivityCard> activityCards=new ArrayList<>();
         for (ActivityEntity activity: lists){
-            List<Event> events=eventRepository.findByActivity_Id(activity.getId());
-            if (events.get(0).getDateTime().toLocalDate().isAfter(filterCardsRequest.startDate())&&events.get(0).getDateTime().toLocalDate().isBefore(filterCardsRequest.endDate())){
-                Long EventId=eventService.getEventId(activity.getId());
-                Event evento=eventService.getEvent(activity.getId());
-                List<String> tags= tagService.getAllTagsByEventId(activity.getId());
-                BigDecimal price=ticketService.getLowestPrice(EventId);
-                activityCards.add(new ActivityCard(
-                        activity.getId(),
-                        activity.getPhoto(),
-                        evento.getDateTime(),
-                        activity.getName(),
-                        tags,
-                        price,
-                        activity.getActivityType()
+            Long EventId=eventService.getEventId(activity.getId());
+            if (eventRepository.findById(EventId).get().getDateTime().toLocalDate().isAfter(filterCardsRequest.startDate())&&eventRepository.findById(EventId).get().getDateTime().toLocalDate().isBefore(filterCardsRequest.endDate())){
+                if (ticketService.getLowestPrice(EventId).compareTo(filterCardsRequest.min())>0 && ticketService.getLowestPrice(EventId).compareTo(filterCardsRequest.max())>0){
+                    Event evento=eventService.getEvent(activity.getId());
+                    List<String> tags= tagService.getAllTagsByEventId(activity.getId());
+                    BigDecimal price=ticketService.getLowestPrice(EventId);
+                    activityCards.add(new ActivityCard(
+                            activity.getId(),
+                            activity.getPhoto(),
+                            evento.getDateTime(),
+                            activity.getName(),
+                            tags,
+                            price,
+                            activity.getActivityType()
 
-                ));
+                    ));
+                }
             }
         }
         return activityCards;

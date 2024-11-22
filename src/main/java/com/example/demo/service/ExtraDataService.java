@@ -61,8 +61,12 @@ public class ExtraDataService {
             }
             aforum+=ticketsEntity.getQuantity();
         }
+        if (interator==0){
+            averageAge= (float) (edad/interator);
+        } else {
+            averageAge=0.0f;
+        }
 
-        averageAge= (float) (edad/interator);
 
 
         return new GeneralDataResponse(
