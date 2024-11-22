@@ -80,9 +80,11 @@ public class ExtraDataService {
     }
 
     public Integer addInter(Long eventId){
-        Event event=eventRepository.findById(eventId).get();
-        event.setInteraccion(event.getInteraccion()+1);
-        eventRepository.save(event);
-        return event.getInteraccion();
+        List<Event> events=eventRepository.findByActivity_Id(eventId);
+        for (Event event : events) {
+            event.setInteraccion(event.getInteraccion()+1);
+            eventRepository.save(event);
+        }
+        return 1;
     }
 }
