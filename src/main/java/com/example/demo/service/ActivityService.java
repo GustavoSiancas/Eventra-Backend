@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -129,31 +131,51 @@ public class ActivityService {
     }
 
 
-    public List<ActivityCard> getAllCardAFilter(FilterCardsRequest filterCardsRequest){
-        List<ActivityEntity> lists = activityRepository.findAll();
-        List<ActivityCard> activityCards=new ArrayList<>();
-        for (ActivityEntity activity: lists){
-            Long EventId=eventService.getEventId(activity.getId());
-            if (eventRepository.findById(EventId).get().getDateTime().toLocalDate().isAfter(filterCardsRequest.startDate())&&eventRepository.findById(EventId).get().getDateTime().toLocalDate().isBefore(filterCardsRequest.endDate())){
-                if (ticketService.getLowestPrice(EventId).compareTo(filterCardsRequest.min())>0 && ticketService.getLowestPrice(EventId).compareTo(filterCardsRequest.max())>0){
-                    Event evento=eventService.getEvent(activity.getId());
-                    List<String> tags= tagService.getAllTagsByEventId(activity.getId());
-                    BigDecimal price=ticketService.getLowestPrice(EventId);
-                    activityCards.add(new ActivityCard(
-                            activity.getId(),
-                            activity.getPhoto(),
-                            evento.getDateTime(),
-                            activity.getName(),
-                            tags,
-                            price,
-                            activity.getActivityType()
+    public List<ActivityCard> getAllCardAFilter(FilterCardsRequest filterCardsRequest) {
+        // Validar parámetros de entrada
+        if (filterCardsRequest == null || filterCardsRequest.startDate() == null || filterCardsRequest.endDate() == null) {
+            throw new IllegalArgumentException("FilterCardsRequest o las fechas no pueden ser nulas");
+        }
 
-                    ));
+        List<ActivityEntity> activities = activityRepository.findAll();
+        List<ActivityCard> activityCards = new ArrayList<>();
+
+        for (ActivityEntity activity : activities) {
+            // Obtener EventId y evento asociado
+            Long eventId = eventService.getEventId(activity.getId());
+            Optional<Event> optionalEvent = eventRepository.findById(eventId);
+
+            if (optionalEvent.isPresent()) {
+                Event event = optionalEvent.get();
+
+                // Filtrar por rango de fechas
+                LocalDate eventDate = event.getDateTime().toLocalDate();
+                if (!eventDate.isAfter(filterCardsRequest.startDate()) || !eventDate.isBefore(filterCardsRequest.endDate())) {
+                    continue; // Saltar si no está en el rango
                 }
+
+                // Obtener precio más bajo y filtrar por rango de precios
+                BigDecimal lowestPrice = ticketService.getLowestPrice(eventId);
+                if (lowestPrice.compareTo(filterCardsRequest.min()) < 0 || lowestPrice.compareTo(filterCardsRequest.max()) > 0) {
+                    continue; // Saltar si el precio no está en el rango
+                }
+
+                // Construir el ActivityCard
+                List<String> tags = tagService.getAllTagsByEventId(activity.getId());
+                activityCards.add(new ActivityCard(
+                        activity.getId(),
+                        activity.getPhoto(),
+                        event.getDateTime(),
+                        activity.getName(),
+                        tags,
+                        lowestPrice,
+                        activity.getActivityType()
+                ));
             }
         }
         return activityCards;
     }
+
 
     public ActivityTypeUpdate updateType(ActivityTypeUpdate activityTypeUpdate){
         List<ActivityEntity> lists = new ArrayList<>();
