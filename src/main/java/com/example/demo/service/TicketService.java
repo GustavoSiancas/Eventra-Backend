@@ -50,7 +50,7 @@ public class TicketService {
         List<TicketsEntity> tickets=ticketRepository.findByEvent_Id(eventId);
         List<TickeSimpleRequest> ticketList= new ArrayList<>();
         for (TicketsEntity ticketEntity : tickets) {
-            ticketList.add(new TickeSimpleRequest(ticketEntity.getName(),ticketEntity.getColor(),ticketEntity.getQuantity(),ticketEntity.getPrice()));
+            ticketList.add(new TickeSimpleRequest(ticketEntity.getId(),ticketEntity.getName(),ticketEntity.getColor(),ticketEntity.getQuantity(),ticketEntity.getPrice()));
         }
         return ticketList;
     }
