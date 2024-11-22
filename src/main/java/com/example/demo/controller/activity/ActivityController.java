@@ -2,6 +2,7 @@ package com.example.demo.controller.activity;
 
 import com.example.demo.controller.activity.request.ActivityFullRequest;
 import com.example.demo.controller.activity.request.ActivityTypeUpdate;
+import com.example.demo.controller.activity.request.FilterCardsRequest;
 import com.example.demo.controller.activity.response.ActivityCard;
 import com.example.demo.entity.ActivityEntity;
 import com.example.demo.entity.enums.ActivityType;
@@ -26,7 +27,7 @@ public class ActivityController {
 
     @GetMapping
     public ResponseEntity<List<ActivityFullRequest>> getAllActivities() {
-        List<ActivityFullRequest> lista=activityService.getAllActivities();
+        List<ActivityFullRequest> lista = activityService.getAllActivities();
         return ResponseEntity.ok(lista);
     }
 
@@ -38,7 +39,7 @@ public class ActivityController {
 
     @PutMapping("/type")
     public ResponseEntity<ActivityTypeUpdate> updateActivityType(@RequestBody ActivityTypeUpdate activityTypeUpdate) {
-        ActivityTypeUpdate activityTypeUpdate1= activityService.updateType(activityTypeUpdate);
+        ActivityTypeUpdate activityTypeUpdate1 = activityService.updateType(activityTypeUpdate);
         return ResponseEntity.ok(activityTypeUpdate1);
     }
 
@@ -47,4 +48,10 @@ public class ActivityController {
         List<ActivityCard> activitiesCards = activityService.getAllCardActivities(type);
         return ResponseEntity.ok(activitiesCards);
     }
+
+    @PostMapping("/cards/filter")
+    public ResponseEntity<List<ActivityCard>> filterActivitiesByCards(@RequestBody FilterCardsRequest filterCardsRequest) {
+        return ResponseEntity.ok(activityService.getAllCardAFilter(filterCardsRequest));
+    }
+
 }

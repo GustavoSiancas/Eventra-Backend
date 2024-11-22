@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.controller.activity.request.ActivityFullRequest;
 import com.example.demo.controller.activity.request.ActivityTypeUpdate;
+import com.example.demo.controller.activity.request.FilterCardsRequest;
 import com.example.demo.controller.activity.response.ActivityCard;
 import com.example.demo.controller.ticket.request.TickeSimpleRequest;
 import com.example.demo.entity.ActivityEntity;
@@ -9,6 +10,7 @@ import com.example.demo.entity.Event;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.enums.ActivityType;
 import com.example.demo.repository.ActivityRepository;
+import com.example.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ public class ActivityService {
     private TicketService ticketService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private EventRepository eventRepository;
 
 
     public ActivityEntity createActivity(ActivityFullRequest activity) {
@@ -120,6 +124,32 @@ public class ActivityService {
                     activity.getActivityType()
 
             ));
+        }
+        return activityCards;
+    }
+
+
+    public List<ActivityCard> getAllCardAFilter(FilterCardsRequest filterCardsRequest){
+        List<ActivityEntity> lists = activityRepository.findAll();
+        List<ActivityCard> activityCards=new ArrayList<>();
+        for (ActivityEntity activity: lists){
+            List<Event> events=eventRepository.findByActivity_Id(activity.getId());
+            if (events.get(0).getDateTime().toLocalDate().isAfter(filterCardsRequest.startDate())&&events.get(0).getDateTime().toLocalDate().isBefore(filterCardsRequest.endDate())){
+                Long EventId=eventService.getEventId(activity.getId());
+                Event evento=eventService.getEvent(activity.getId());
+                List<String> tags= tagService.getAllTagsByEventId(activity.getId());
+                BigDecimal price=ticketService.getLowestPrice(EventId);
+                activityCards.add(new ActivityCard(
+                        activity.getId(),
+                        activity.getPhoto(),
+                        evento.getDateTime(),
+                        activity.getName(),
+                        tags,
+                        price,
+                        activity.getActivityType()
+
+                ));
+            }
         }
         return activityCards;
     }

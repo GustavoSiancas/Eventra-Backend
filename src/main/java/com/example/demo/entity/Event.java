@@ -21,6 +21,8 @@ public class Event {
 
     private LocalDateTime dateTime;
 
+    private Integer interaccion=0;
+
     @ManyToOne
     @JoinColumn(name="activity_id",referencedColumnName = "id")
     private ActivityEntity activity;

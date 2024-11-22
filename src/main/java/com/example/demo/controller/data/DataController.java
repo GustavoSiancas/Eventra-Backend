@@ -17,4 +17,10 @@ public class DataController {
     public ResponseEntity<GeneralDataResponse> getData(@PathVariable Long id) {
         return ResponseEntity.ok(extraDataService.getAllExtraDatabyId(id));
     }
+
+    @GetMapping("/interaccion/{id}")
+    public ResponseEntity<Integer> addInter(@PathVariable Long id){
+        return ResponseEntity.ok(extraDataService.addInter(id));
+    }
+
 }

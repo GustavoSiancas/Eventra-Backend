@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.data.response.GeneralDataResponse;
+import com.example.demo.entity.Event;
 import com.example.demo.entity.TicketsEntity;
 import com.example.demo.entity.TicketsNFT;
+import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.ExtraDataRepository;
 import com.example.demo.repository.TicketRepository;
 import com.example.demo.repository.TicketsNFTRepository;
@@ -21,6 +23,8 @@ public class ExtraDataService {
     private TicketsNFTRepository ticketsNFTRepository;
     @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     public GeneralDataResponse getAllExtraDatabyId(Long id){
         List<TicketsEntity> ticketsEntities=ticketRepository.findByEvent_Id(id);
@@ -62,12 +66,19 @@ public class ExtraDataService {
 
 
         return new GeneralDataResponse(
-                1000,
+                eventRepository.findById(id).get().getInteraccion(),
                 aforum,
                 actual,
                 male,
                 female,
                 averageAge
         );
+    }
+
+    public Integer addInter(Long eventId){
+        Event event=eventRepository.findById(eventId).get();
+        event.setInteraccion(event.getInteraccion()+1);
+        eventRepository.save(event);
+        return event.getInteraccion();
     }
 }
